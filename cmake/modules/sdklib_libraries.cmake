@@ -94,9 +94,6 @@ macro(load_sdklib_libraries)
         pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcryptopp)
         target_link_libraries(SDKlib PUBLIC PkgConfig::cryptopp) # TODO: Private for SDK core
 
-        pkg_check_modules(inotify REQUIRED IMPORTED_TARGET libinotify)
-        target_link_libraries(SDKlib PRIVATE PkgConfig::inotify)
-
         pkg_check_modules(sodium REQUIRED IMPORTED_TARGET libsodium)
         target_link_libraries(SDKlib PRIVATE PkgConfig::sodium)
 

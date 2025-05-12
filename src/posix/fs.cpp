@@ -2483,7 +2483,7 @@ DirNotify* LinuxFileSystemAccess::newdirnotify(LocalNode& root,
 }
 #endif
 
-#elif(USE_PERIODIC)
+#elif defined(USE_PERIODIC)
 DirNotify* FallbackFileSystemAccess::newdirnotify(LocalNode& root,
     const LocalPath& rootPath,
     Waiter*)
