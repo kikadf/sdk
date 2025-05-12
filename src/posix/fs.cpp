@@ -825,24 +825,24 @@ PosixFileSystemAccess::PosixFileSystemAccess()
     defaultfolderpermissions = 0700;
 }
 
-#if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__) || \
-    defined(__NetBSD__) || defined(__DragonFly__)
 #ifdef ENABLE_SYNC
 
 bool LinuxFileSystemAccess::initFilesystemNotificationSystem()
 {
+#ifdef USE_PERIODIC
     mNotifyFd = inotify_init1(IN_NONBLOCK);
 
     if (mNotifyFd < 0)
         return mNotifyFd = -errno, false;
 
+#endif
     return true;
 }
 #endif // ENABLE_SYNC
 
 LinuxFileSystemAccess::~LinuxFileSystemAccess()
 {
-#ifdef ENABLE_SYNC
+#if defined(ENABLE_SYNC) && !defined(USE_PERIODIC)
 
     // Make sure there are no active notifiers.
     assert(mNotifiers.empty());
@@ -886,8 +886,7 @@ bool PosixFileSystemAccess::cwd_static(LocalPath& path)
 
 // wake up from filesystem updates
 
-#if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__) || \
-    defined(__NetBSD__) || defined(__DragonFly__)
+#if defined(__linux__)
 void LinuxFileSystemAccess::addevents([[maybe_unused]] Waiter* waiter, int /*flags*/)
 {
 #ifdef ENABLE_SYNC
@@ -1646,8 +1645,7 @@ void PosixFileSystemAccess::statsid(string *id) const
 }
 
 #if defined(ENABLE_SYNC)
-#if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__) || \
-    defined(__NetBSD__) || defined(__DragonFly__)
+#if defined(__linux__)
 
 LinuxDirNotify::LinuxDirNotify(LinuxFileSystemAccess& owner,
                                LocalNode& /*root*/,
@@ -1756,6 +1754,9 @@ void LinuxDirNotify::removeWatch(WatchMapIterator entry)
 }
 
 #endif // USE_INOTIFY
+#elif defined(USE_PERIODIC)
+
+
 #endif // __linux__
 
 #endif //ENABLE_SYNC
@@ -2456,8 +2457,7 @@ unique_ptr<DirAccess>  PosixFileSystemAccess::newdiraccess()
 #endif
 }
 
-#if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__) || \
-    defined(__NetBSD__) || defined(__DragonFly__)
+#if defined(__linux__)
 #ifdef ENABLE_SYNC
 DirNotify* LinuxFileSystemAccess::newdirnotify(LocalNode& root,
     const LocalPath& rootPath,
