@@ -10,6 +10,12 @@
 #cmakedefine ENABLE_SYNC 1
 #endif
 
+/* Defined to use periodic scan instead of filesystem notification*/
+#if (defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)) && \
+     defined(ENABLE_SYNC)
+#define USE_PERIODIC
+#endif
+
 #ifndef ENABLE_LOG_PERFORMANCE
 #cmakedefine ENABLE_LOG_PERFORMANCE 1
 #endif

@@ -192,8 +192,7 @@ private:
 
 };
 
-#if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__) || \
-    defined(__NetBSD__) || defined(__DragonFly__)
+#if defined(__linux__)
 
 #define FSACCESS_CLASS LinuxFileSystemAccess
 
@@ -260,6 +259,29 @@ private:
 }; // LinuxDirNotify
 
 #endif // ENABLE_SYNC
+
+#elif defined(USE_PERIODIC)
+
+#define FSACCESS_CLASS FallbackFileSystemAccess
+
+class FallbackFileSystemAccess : public PosixFileSystemAccess
+{
+public:
+    DirNotify* newdirnotify(LocalNode& root,
+                            const LocalPath& rootPath,
+                            Waiter* waiter) override;
+
+    void addevents(Waiter*, int) override;
+
+    int checkevents(Waiter*) override;
+
+}; // class FallbackFileSystemAccess
+
+class FallbackDirNotify : public DirNotify
+{
+public:
+    FallbackDirNotify(const LocalPath& rootPath);
+};
 
 #endif // __linux__
 

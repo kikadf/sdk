@@ -35,10 +35,6 @@
 #include "syncinternals/syncinternals.h"
 #include "syncinternals/synciuploadthrottlingmanager.h"
 
-#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
-#define USE_PERIODIC
-#endif
-
 namespace mega {
 
 struct MegaApp;

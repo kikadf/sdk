@@ -237,11 +237,13 @@ class MEGA_API LocalPath
     friend class ScopedSyncPathRestore;
     friend class WinFileSystemAccess;
     friend class PosixFileSystemAccess;
+    friend class FallbackFileSystemAccess;
     friend struct WinDirAccess;
     friend struct WinDirNotify;
     friend class LinuxDirNotify;
     friend class MacDirNotify;
     friend class PosixDirNotify;
+    friend class FallbackDirNotify;
     friend class WinFileAccess;
     friend class PosixFileAccess;
     friend void RemoveHiddenFileAttribute(LocalPath& path);
